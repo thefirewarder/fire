@@ -1,1 +1,958 @@
-<h1>Fireward Games</h1>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/p5.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <meta charset="utf-8" />
+
+  </head>
+  <body>
+    <main>
+      <p id="ui">Status: Idle. Equipped: Paper Axe. Trees: 0 Health: 10 Seed inventory: none</p>
+      <button class="items" id="potion">Buy Healing Potion, 3 trees. Heals 1-5 damage.</button>
+            <button class="items" id="cardboard">Buy Cardboard Axe, 10 trees. Speed: 4.75, Knockback: 1 Damage: 1 Multiplier: 1</button>
+      <button class="items" id="dull">Buy Dull Axe, 20 trees. Speed: 4.25, Knockback: 1 Damage: 1 Multiplier: 1</button>
+      <button class="items" id="basic">Buy Basic Axe, 30 trees. Speed: 4, Knockback: 1 Damage: 1 Multiplier: 2</button>
+            <button class="items" id="spring">Buy Springy hand, 80 trees. Speed: 6, Knockback: 4 Damage: 1 Multiplier: 2</button>
+      <button class="items" id="danny">Buy Damaging Danny, 80 trees. Speed: 6, Knockback: 1 Damage: 2 Multiplier: 2</button>
+       <button class="items" id="soil">Buy Soil Upgrade, 3 trees. Speeds up tree growing by 100 milliseconds.</button>
+<button class="items" id="spawn">Buy Spawn Chance increase, 3 trees. Increases the chances of a basic or willow tree naturally spawning</button>
+      <button id="shop">Open Shop</button>
+      <canvas width="3600" height="3200"></canvas>
+      <h1 id="death">GAME OVER</h1>
+
+    </main>
+    <script>
+      // Canvas setup
+let dmg=1
+let spring = document.querySelector("#spring")
+let willow = new Image()
+willow.src="willow.png"
+let danny = document.querySelector("#danny")
+let basic = document.querySelector("#basic")
+let cost4 = 40
+let knocked = false
+let multiplier = 1
+let frenzied=false
+let iEnable = false
+let spawn = document.querySelector("#spawn")
+let soil = document.querySelector("#soil")
+let seed = "none"
+chance = 0
+grow = 0
+if(window.innerWidth>780)
+  {
+    iEnabled=true
+  }
+ setTimeout(spawnTree,30000-chance)
+let potion = document.querySelector("#potion")
+let cost1=10
+let knockback = 0
+let items = document.querySelectorAll(".items")
+let canvas = document.querySelector("canvas");
+let ctx = canvas.getContext("2d");
+let cardboard = document.querySelector("#cardboard")
+let dull = document.querySelector("#dull")
+let button = document.querySelector("#shop")
+let bear = new Image()
+let bhp = 5
+let death= document.querySelector("#death")
+let hp = 10
+let dead = false
+bear.src="bear.png"
+// Canvas dimensions
+button.addEventListener("click",clickHandler,false)
+shopping=false
+setInterval(removeStumps,15000)
+canvas.width = 1100; // Screen width
+canvas.height = 800; // Screen height
+let touchStartX = 0;  
+let touchStartY = 0;  
+let touchEndX = 0;    
+let touchEndY = 0;    
+// Block size
+let speed=0
+let concentrating = false
+let trees = 0
+let bronze = new Image()
+bronze.src="bronze.png"
+let silver = new Image()
+silver.src="silver.png"
+let gold = new Image()
+gold.src="gold.png"
+let diamond = new Image()
+diamond.src="diamond.png"
+let inventory="Paper Axe"
+let ui=document.querySelector("#ui")
+const BLOCK_SIZE = 64;
+let shop = new Image()
+shop.src = "shop.png"
+let stone = new Image()
+stone.src="stone.png"
+let grass = new Image()
+grass.src="grass.png"
+let logan = new Image()
+let tree=new Image()
+tree.src="tree.png"
+let stump = new Image()
+stump.src="stump.png"
+let magma = new Image()
+magma.src="magma.png"
+let flame = new Image()
+flame.src="flame.png"
+let pRow = 4
+let pCol = 4
+logan.src="logan.png"
+window.addEventListener("keydown",keydownHandler,false)
+// Disable scrolling on touch devices
+
+document.addEventListener('touchmove', function(event) {
+  event.preventDefault();
+}, { passive: false }); 
+
+// World represented as a 2D array
+let mapping=
+[
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,2,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,8,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1],
+[1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+]
+let mRow = mapping.length-5
+let mCol = mapping[0].length-5
+stone.addEventListener("load",gameLoop,false)
+grass.addEventListener("load",loadHandler,false)
+// Camera
+function loadHandler()
+{
+  
+}
+let camera = {
+  x: 0, // Top-left corner of the camera in pixels
+  y: 0,
+  width: canvas.width,
+  height: canvas.height,
+};
+
+// Touch variables
+let startX, startY, endX, endY;
+
+// Swipe threshold (minimum distance to register a swipe)
+const SWIPE_THRESHOLD = 30;
+
+// Draw function
+function draw() {
+  // Clear the canvas
+  if(mapping[pRow][pCol]===3&&!frenzied)
+    {
+      dmg++
+      knockback++
+      speed+=1000
+      ui.innerHTML="Status: Frenzy. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp
+      frenzied = true
+      setTimeout(endFrenzy,20000)
+    }
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Calculate the visible range in the 2D array
+  const startCol = Math.max(0, Math.floor(camera.x / BLOCK_SIZE));
+  const endCol = Math.min(mapping[0].length, Math.ceil((camera.x + camera.width) / BLOCK_SIZE));
+  const startRow = Math.max(0, Math.floor(camera.y / BLOCK_SIZE));
+  const endRow = Math.min(mapping.length, Math.ceil((camera.y + camera.height) / BLOCK_SIZE));
+
+  // Loop through only visible tiles
+  if(!shopping){
+    items.forEach(item=>{
+      item.style.display = 'none';
+    item.style.visibility="hidden"
+    })
+    if(!dead){
+  for (let row = startRow; row < endRow; row++) {
+    for (let col = startCol; col < endCol; col++) {
+      switch (mapping[row][col]) {
+        case 1: // Stone
+          ctx.drawImage(stone, 0, 0, stone.width, stone.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+        case 0: // Grass
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 2: // Logan
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(logan, 0, 0, logan.width, logan.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+        case 3: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(tree, 0, 0, tree.width, tree.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 4: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(stump, 0, 0, stump.width, stump.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 5: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(shop, 100, 100, shop.width, shop.height, col * BLOCK_SIZE - camera.x-40, row * BLOCK_SIZE - camera.y-40, 156,156);
+          break;
+          case 6: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(bear, 0, 0, bear.width, bear.height, col * BLOCK_SIZE - camera.x-40, row * BLOCK_SIZE - camera.y-40, 128,128) 
+          break;
+          case 7: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(willow, 0, 0, willow.width, willow.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, 64,64);
+          break;
+           case 8: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(tree, 0, 0, tree.width, tree.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 9: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(bronze, 0, 0, bronze.width, bronze.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 10: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(silver, 0, 0, silver.width, silver.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 11: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(gold, 0, 0, gold.width, gold.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+          case 12: //Tree
+          ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          ctx.drawImage(diamond, 0, 0, diamond.width, diamond.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
+          break;
+      }
+      }
+    }
+    }
+
+  
+
+} else{
+  items.forEach(item=>{
+    item.style.display="block"
+  item.style.visibility="visible"
+  })
+}
+}
+
+  // Draw only the visible blocks
+ 
+
+function keydownHandler(e) {
+  button.style.display = "none";
+  if (!concentrating && !shopping && !dead) {
+    if (e.key === "ArrowRight") {
+      if (mapping[pRow][pCol + 1] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pCol++;
+        camera.x += 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow][pCol + 1])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow][pCol + 1] === 7 || mapping[pRow][pCol + 1] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "right", mapping[pRow][pCol + 1]);
+        concentrating = true;
+      }
+    } else if (e.key === "ArrowLeft") {
+      if (mapping[pRow][pCol - 1] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pCol--;
+        camera.x -= 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow][pCol - 1])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow][pCol - 1] === 7 || mapping[pRow][pCol - 1] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "left", mapping[pRow][pCol - 1]);
+        concentrating = true;
+      }
+    } else if (e.key === "ArrowUp") {
+      if (mapping[pRow - 1][pCol] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pRow--;
+        camera.y -= 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow - 1][pCol])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow - 1][pCol] === 7 || mapping[pRow - 1][pCol] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "up", mapping[pRow - 1][pCol]);
+        concentrating = true;
+      }
+    } else if (e.key === "ArrowDown") {
+      if (mapping[pRow + 1][pCol] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pRow++;
+        camera.y += 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow + 1][pCol])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow + 1][pCol] === 7 || mapping[pRow + 1][pCol] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "down", mapping[pRow + 1][pCol]);
+        concentrating = true;
+      }
+    } else if (e.key === "w") {
+      plantSeed("ArrowUp");
+    } else if (e.key === "a") {
+      plantSeed("ArrowLeft");
+    } else if (e.key === "s") {
+      plantSeed("ArrowDown");
+    } else if (e.key === "d") {
+      plantSeed("ArrowRight");
+    }
+  }
+
+  if (Math.ceil(Math.random() * 100) <= 90) {
+    moveMonsters();
+  }
+}
+
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// Game loop
+function gameLoop() {
+  draw();
+  requestAnimationFrame(gameLoop);
+}
+function spawnTree()
+{
+  if(mapping[getRandomInt(4,mapping.length-5)][getRandomInt(4,mapping[0].length-5)]!==5)
+    {
+      if(Math.ceil(Math.random()*3)<3)
+      {
+  mapping[getRandomInt(4,mapping.length-5)][getRandomInt(4,mapping[0].length-5)]=3
+      }
+     else{
+        mapping[getRandomInt(4,mapping.length-5)][getRandomInt(4,mapping[0].length-5)]=7 
+     }
+    }
+  setTimeout(spawnTree,30000-chance)
+}
+function chop(direction,tree)
+{
+  switch(direction)
+    {
+        
+      case "left":
+        mapping[pRow][pCol-1]=4
+        break;
+        case "right":
+        mapping[pRow][pCol+1]=4
+        break;
+        case "up":
+        mapping[pRow-1][pCol]=4
+        break;
+        case "down":
+        mapping[pRow+1][pCol]=4
+        break;
+        
+    }
+  concentrating=false
+  if(tree===3)
+    {
+  trees+=multiplier
+      if(Math.ceil(Math.random()*10)!==10)
+        {
+  seed="acorn"
+        }
+      else{
+        seed="willow"
+      }
+    }
+  else if(tree===7)
+    {
+      trees+=multiplier*2
+      if(Math.ceil(Math.random()*10)>4)
+        {
+  seed="acorn"
+        }
+      else if(Math.ceil(Math.random()*6)!==6){
+        seed="willow"
+      }
+      else{
+        seed="bronze"
+      }
+    }
+  else if(tree===8)
+    {
+      hp = Math.floor(hp/3*2)
+    }
+  else if(tree===9)
+    {
+      trees+=multiplier*3
+      if(Math.ceil(Math.random()*10)>4)
+        {
+  seed="willow"
+        }
+      else if(Math.ceil(Math.random()*6)!==6){
+        seed="bronze"
+      }
+      else{
+        seed="silver"
+      }
+    }
+  else if(tree===10)
+    {
+       trees+=multiplier*4
+      if(Math.ceil(Math.random()*10)>4)
+        {
+  seed="bronze"
+        }
+      else if(Math.ceil(Math.random()*6)!==6){
+        seed="silver"
+      }
+      else{
+        seed="gold"
+      }
+    }
+  else if(tree===11)
+    {
+       trees+=multiplier*5
+      if(Math.ceil(Math.random()*10)>4)
+        {
+  seed="silver"
+        }
+      else if(Math.ceil(Math.random()*6)!==6){
+        seed="gold"
+      }
+      else{
+        seed="diamond"
+      }
+    }
+  else if(tree===12)
+{
+   trees+=multiplier*6
+      if(Math.ceil(Math.random()*10)>4)
+        {
+  seed="gold"
+        }
+      else if(Math.ceil(Math.random()*6)!==6){
+        seed="diamond"
+      }
+}
+   ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+}
+// Velocity threshold for fast swipe detection (px/ms)
+const FAST_SWIPE_THRESHOLD = 0.5;
+
+
+document.addEventListener("touchstart", (event) => {
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchStartTime = new Date().getTime();
+});
+
+document.addEventListener("touchmove", (event) => {
+    // Track touch movement in real time
+    const touch = event.touches[0];
+    touchEndX = touch.clientX;
+    touchEndY = touch.clientY;
+});
+
+document.addEventListener("touchend", () => {
+    touchEndTime = new Date().getTime();
+    handleSwipeGesture();
+});
+
+
+// Minimum swipe distance threshold
+
+
+
+
+
+
+function handleSwipeGesture() {
+    let deltaX = touchEndX - touchStartX;
+    let deltaY = touchEndY - touchStartY;
+    let elapsedTime = touchEndTime - touchStartTime; // Time in milliseconds
+
+    // Avoid division by zero
+    if (elapsedTime <= 0) elapsedTime = 1;
+
+    let keyEvent = {};
+
+    // Calculate swipe distance and velocity (px/ms)
+    let distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+    let velocity = distance / elapsedTime;  // pixels per millisecond
+
+    
+
+    // Determine swipe direction and threshold checking
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
+            keyEvent.key = deltaX > 0 ? 'ArrowRight' : 'ArrowLeft';
+        }
+    } else {
+        if (Math.abs(deltaY) >= SWIPE_THRESHOLD) {
+            keyEvent.key = deltaY > 0 ? 'ArrowDown' : 'ArrowUp';
+        }
+    }
+
+    if (keyEvent.key) {
+       
+
+        if (velocity > 3) {
+           
+            plantSeed(keyEvent.key);
+        } else {
+            
+            keydownHandler(keyEvent);
+        }
+    }
+}
+
+function plantSeed(e) {
+  if (e === "ArrowUp" && mapping[pRow - 1][pCol] === 0) {
+    switch (seed) {
+      case "acorn":
+        setTimeout(growTree, 10000 - grow, 3, pRow - 1, pCol);
+        break;
+      case "willow":
+        setTimeout(growTree, 18000 - grow, 7, pRow - 1, pCol);
+        break;
+      case "bronze":
+        setTimeout(growTree, 18000 - grow, 9, pRow - 1, pCol);
+        break;
+      case "silver":
+        setTimeout(growTree, 18000 - grow, 10, pRow - 1, pCol);
+        break;
+      case "gold":
+        setTimeout(growTree, 18000 - grow, 11, pRow - 1, pCol);
+        break;
+      case "diamond":
+        setTimeout(growTree, 18000 - grow, 12, pRow - 1, pCol);
+        break;
+    }
+  } else if (e === "ArrowDown" && mapping[pRow + 1][pCol] === 0) {
+    switch (seed) {
+      case "acorn":
+        setTimeout(growTree, 10000 - grow, 3, pRow + 1, pCol);
+        break;
+      case "willow":
+        setTimeout(growTree, 18000 - grow, 7, pRow + 1, pCol);
+        break;
+      case "bronze":
+        setTimeout(growTree, 18000 - grow, 9, pRow + 1, pCol);
+        break;
+      case "silver":
+        setTimeout(growTree, 18000 - grow, 10, pRow + 1, pCol);
+        break;
+      case "gold":
+        setTimeout(growTree, 18000 - grow, 11, pRow + 1, pCol);
+        break;
+      case "diamond":
+        setTimeout(growTree, 18000 - grow, 12, pRow + 1, pCol);
+        break;
+    }
+  } else if (e === "ArrowLeft" && mapping[pRow][pCol - 1] === 0) {
+    switch (seed) {
+      case "acorn":
+        setTimeout(growTree, 10000 - grow, 3, pRow, pCol - 1);
+        break;
+      case "willow":
+        setTimeout(growTree, 18000 - grow, 7, pRow, pCol - 1);
+        break;
+      case "bronze":
+        setTimeout(growTree, 18000 - grow, 9, pRow, pCol - 1);
+        break;
+      case "silver":
+        setTimeout(growTree, 18000 - grow, 10, pRow, pCol - 1);
+        break;
+      case "gold":
+        setTimeout(growTree, 18000 - grow, 11, pRow, pCol - 1);
+        break;
+      case "diamond":
+        setTimeout(growTree, 18000 - grow, 12, pRow, pCol - 1);
+        break;
+    }
+  } else if (e === "ArrowRight" && mapping[pRow][pCol + 1] === 0) {
+    switch (seed) {
+      case "acorn":
+        setTimeout(growTree, 10000 - grow, 3, pRow, pCol + 1);
+        break;
+      case "willow":
+        setTimeout(growTree, 18000 - grow, 7, pRow, pCol + 1);
+        break;
+      case "bronze":
+        setTimeout(growTree, 18000 - grow, 9, pRow, pCol + 1);
+        break;
+      case "silver":
+        setTimeout(growTree, 18000 - grow, 10, pRow, pCol + 1);
+        break;
+      case "gold":
+        setTimeout(growTree, 18000 - grow, 11, pRow, pCol + 1);
+        break;
+      case "diamond":
+        setTimeout(growTree, 18000 - grow, 12, pRow, pCol + 1);
+        break;
+    }
+  }
+
+  seed = "none";
+  ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+}
+
+// Example function to handle swipe actions
+
+
+
+function removeStumps()
+{
+  for(let row = 0; row < mapping.length; row++)
+    {
+      for(let col = 0; col < mapping[0].length; col++)
+      {
+        if(mapping[row][col]===4)
+          {
+            mapping[row][col]=0
+          }
+      }
+    }
+}
+
+function clickHandler()
+{if(!shopping){
+shopping=true
+  
+  button.innerHTML="Back to game"
+}
+else{
+shopping=false
+  button.innerHTML="Open Shop"
+}
+
+
+
+}
+function moveMonsters()
+{
+  let up = 1
+  let down = 2
+  let left = 3
+  let right = 4
+  let priorityDirections = []
+let validDirections=[]
+let direction = undefined;
+  if(mRow > 3)
+    {
+      let thingAbove = mapping[mRow-1][mCol]
+      if(pRow<mRow)
+        {
+          priorityDirections.push(up)
+        }
+      else if(thingAbove===0)
+        {
+           validDirections.push(up)
+        }
+      
+    }
+  if(mRow < mapping.length-4)
+    {
+       let thingBelow = mapping[mRow+1][mCol]
+      if(pRow>mRow)
+        {
+          priorityDirections.push(down)
+        }
+      else if(thingBelow===0)
+        {
+           validDirections.push(down)
+        }
+    }
+  if(mCol < mapping[0].length-4)
+    {
+       let thingRight = mapping[mRow][mCol+1]
+      if(pCol>mCol)
+        {
+          priorityDirections.push(right)
+        }
+      else if(thingRight===0)
+        {
+           validDirections.push(right)
+        }
+    }
+  if(mCol > 3)
+    {
+       let thingLeft = mapping[mRow][mCol-1]
+      if(pCol<mCol)
+        {
+          priorityDirections.push(left)
+        }
+      else if(thingLeft===0)
+        {
+           validDirections.push(left)
+        }
+    }
+  if(priorityDirections.length>0)
+    {
+     let randomNumber= Math.floor(Math.random()*priorityDirections.length)
+         direction = priorityDirections[randomNumber]
+    }
+  else if(validDirections.length>0)
+    {
+      if(validDirections.includes(up))
+        {
+          direction = up
+        }
+      else if(validDirections.includes(left))
+        {
+          direction=left
+        }
+      else
+        {
+           randomNumber= Math.floor(Math.random()*validDirections.length)
+         direction = validDirections[randomNumber]
+        }
+    }
+  if(!knocked)
+    {
+  switch(direction)
+    {
+      case up:
+        mapping[mRow][mCol]=0
+        if(mapping[mRow-1][mCol]===0)
+          {
+        mRow--
+          }
+        if(mapping[mRow-1][mCol]===2&&Math.ceil(Math.random()*2)===1)
+          {
+            hp--
+          }
+        mapping[mRow][mCol]=6
+        break;
+        case down:
+        mapping[mRow][mCol]=0
+        if(mapping[mRow+1][mCol]===0)
+          {
+        mRow++
+          }
+        if(mapping[mRow+1][mCol]===2&&Math.ceil(Math.random()*2)===1)
+          {
+            hp--
+          }
+        mapping[mRow][mCol]=6
+        break;
+        case left:
+        mapping[mRow][mCol]=0
+         if(mapping[mRow][mCol-1]===0)
+          { 
+        mCol--
+          }
+        if(mapping[mRow][mCol-1]===2&&Math.ceil(Math.random()*2)===1)
+          {
+            hp--
+          }
+        mapping[mRow][mCol]=6
+        break;
+        case right:
+        mapping[mRow][mCol]=0
+        if(mapping[mRow][mCol+1]===0)
+          {
+        mCol++
+          }
+        if(mapping[mRow][mCol+1]===2&&Math.ceil(Math.random()*2)===1)
+          {
+            hp--
+          }
+        mapping[mRow][mCol]=6
+        break;
+    }
+   }
+  else{
+        knocked=false
+      }
+  if(hp<=0)
+    {
+      dead=true
+      button.style.display="none"
+      ui.style.display="none"
+      rect(0,0,400,400)
+      death.style.display="block"
+      items.forEach(item=>{
+        item.style.display="none"
+      item.style.visibility="visible"
+      })
+    }
+}
+cardboard.addEventListener("click",shop1,false)
+potion.addEventListener("click",shop2,false)
+dull.addEventListener("click",shop3,false)
+basic.addEventListener("click",shop4,false)
+spring.addEventListener("click",shop5,false)
+danny.addEventListener("click",shop6,false)
+soil.addEventListener("click",shop7,false)
+spawn.addEventListener("click",shop7,false)
+cost7 = 3
+cost8 = 3
+cost2 = 3
+cost3 = 25
+cost5=90
+var cost6 = 90
+function shop1()
+{
+  if(trees>=cost1)
+    {
+      trees-=cost1
+      inventory="Cardboard Axe"
+      speed=250
+      knockback=1
+      dmg = 1
+      cost1*=1.1
+      cost1=Math.ceil(cost1)
+       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+      cardboard.innerHTML="Buy Cardboard Axe,"+cost1+" trees. Speed: 4.75, Knockback: 1 Damage: 1 Multiplier: 1"
+    }
+}
+function shop2()
+{
+  if(trees>=cost2)
+    {
+      trees-=cost2
+      cost2*=1.1
+      hp+=Math.ceil(Math.random()*5)
+      if(hp>10)
+        {
+          hp=10
+        }
+      cost2=Math.ceil(cost2)
+       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+      potion.innerHTML="Buy Healing Potion,"+cost2+" trees. Heals 1-5 damage."
+    }
+}
+function shop3()
+{
+  if(trees>=cost3)
+    {
+      trees-=cost3
+      inventory="Dull Axe"
+      speed=750
+      knockback=1
+      dmg = 1
+      cost3*=1.1
+      cost3=Math.ceil(cost3)
+       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+      cardboard.innerHTML="Buy Cardboard Axe,"+cost3+" trees. Speed: 4.25, Knockback: 1 Damage: 1 Multiplier: 1"
+    }
+}
+function shop4()
+{
+  if(trees>=cost4)
+    {
+      trees-=cost4
+      inventory="Basic Axe"
+      speed=1000
+      knockback=1
+      multiplier = 2
+      dmg = 1
+      cost4*=1.1
+      cost4=Math.ceil(cost4)
+       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+     basic.innerHTML="Buy Basic Axe,"+cost4+" trees. Speed: 4, Knockback: 1 Damage: 1 Multiplier: 2"
+    }
+}
+function shop5()
+{
+if(trees>=cost5)
+  {
+trees-=cost5
+    inventory="Springy Hand"
+    speed=-1000
+    dmg=1
+    multiplier=2
+    knockback=4
+    cost5*=1.1
+    cost5=Math.ceil(cost5)
+    ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+     spring.innerHTML="Buy Springy Hand,"+cost5+" trees. Speed: 6, Knockback: 4 Damage: 1 Multiplier: 2"
+}
+}
+function shop6()
+{
+if(trees>=cost6)
+  {
+trees-=cost6
+    inventory="Damaging Danny"
+    speed=-1000
+    dmg=2
+    multiplier=2
+    knockback=1
+    cost6*=1.1
+    cost6=Math.ceil(cost6)
+    ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+     danny.innerHTML="Buy Damaging Danny,"+cost6+" trees. Speed: 6, Knockback: 1 Damage: 2 Multiplier: 2"
+}
+}
+function shop7()
+{
+if(trees>=cost7)
+  {
+    grow+=100
+trees-=cost7
+    cost7*=1.1
+    cost7=Math.ceil(cost7)
+     soil.innerHTML="Buy Soil Upgrade, "+cost7+" trees. Speeds up tree growing by 100 milliseconds."
+}
+}
+function shop8()
+{
+if(trees>=cost8)
+  {
+    chance += 100
+trees-=cost8
+    cost8*=1.1
+    cost8=Math.ceil(cost8)
+     spawn.innerHTML="Buy Spawn Chance increase, "+cost8+" trees. Increases the chances of a basic or willow tree naturally spawning."
+}
+}
+function endFrenzy()
+{      
+  dmg--
+  knockback--
+  speed-=1000
+       ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+  frenzied=false
+}
+function growTree(type,tRow,tCol)
+{
+  mapping[tRow][tCol]=type
+}
+      </script>
+    <script src="sketch.js"></script>
+  </body>
+</html>
