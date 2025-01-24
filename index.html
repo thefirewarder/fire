@@ -327,6 +327,7 @@ function keydownHandler(e) {
         let chopTime = (mapping[newRow][newCol] === 7 || mapping[newRow][newCol] >= 9) ? 9000 : 5000;
         setTimeout(chop, chopTime - speed, moveDirection, mapping[newRow][newCol]);
         concentrating = true;
+        console.log("bad")
       } else if (mapping[newRow][newCol] === 5) {  
         console.log("Shop detected");
         button.style.display = "block";  // Show the shop button when next to a shop
