@@ -292,11 +292,8 @@ function draw() {
 }
 }
 
-  // Draw only the visible blocks
- 
-
 function keydownHandler(e) {
-  button.style.display = "none";
+  button.style.display = "none";  // Initially hiding the button
   if (!concentrating && !shopping && !dead) {
     if (e.key === "d") {
       if (mapping[pRow][pCol + 1] === 0) {
@@ -310,6 +307,9 @@ function keydownHandler(e) {
         let chopTime = (mapping[pRow][pCol + 1] === 7 || mapping[pRow][pCol + 1] >= 9) ? 9000 : 5000;
         setTimeout(chop, chopTime - speed, "right", mapping[pRow][pCol + 1]);
         concentrating = true;
+      } else if (mapping[pRow][pCol + 1] === 5) {  // Check for 5
+        button.style.display = "block";  // Show the button
+
       }
     } else if (e.key === "a") {
       if (mapping[pRow][pCol - 1] === 0) {
@@ -323,6 +323,9 @@ function keydownHandler(e) {
         let chopTime = (mapping[pRow][pCol - 1] === 7 || mapping[pRow][pCol - 1] >= 9) ? 9000 : 5000;
         setTimeout(chop, chopTime - speed, "left", mapping[pRow][pCol - 1]);
         concentrating = true;
+      } else if (mapping[pRow][pCol - 1] === 5) {  // Check for 5
+        button.style.display = "block";  // Show the button
+        
       }
     } else if (e.key === "w") {
       if (mapping[pRow - 1][pCol] === 0) {
@@ -336,6 +339,9 @@ function keydownHandler(e) {
         let chopTime = (mapping[pRow - 1][pCol] === 7 || mapping[pRow - 1][pCol] >= 9) ? 9000 : 5000;
         setTimeout(chop, chopTime - speed, "up", mapping[pRow - 1][pCol]);
         concentrating = true;
+      } else if (mapping[pRow - 1][pCol] === 5) {  // Check for 5
+        button.style.display = "block";  // Show the button
+      
       }
     } else if (e.key === "s") {
       if (mapping[pRow + 1][pCol] === 0) {
@@ -349,6 +355,9 @@ function keydownHandler(e) {
         let chopTime = (mapping[pRow + 1][pCol] === 7 || mapping[pRow + 1][pCol] >= 9) ? 9000 : 5000;
         setTimeout(chop, chopTime - speed, "down", mapping[pRow + 1][pCol]);
         concentrating = true;
+      } else if (mapping[pRow + 1][pCol] === 5) {  // Check for 5
+        button.style.display = "block";  // Show the button
+        
       }
     } else if (e.key === "i") {
       plantSeed("ArrowUp");
@@ -365,6 +374,7 @@ function keydownHandler(e) {
     moveMonsters();
   }
 }
+
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
