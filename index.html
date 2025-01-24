@@ -270,7 +270,7 @@ function draw() {
 function keydownHandler(e) {
   button.style.display = "none";
   if (!concentrating && !shopping && !dead) {
-    if (e.key === "ArrowRight") {
+    if (e.key === "d") {
       if (mapping[pRow][pCol + 1] === 0) {
         ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
         mapping[pRow][pCol] = 0;
@@ -283,7 +283,7 @@ function keydownHandler(e) {
         setTimeout(chop, chopTime - speed, "right", mapping[pRow][pCol + 1]);
         concentrating = true;
       }
-    } else if (e.key === "ArrowLeft") {
+    } else if (e.key === "a") {
       if (mapping[pRow][pCol - 1] === 0) {
         ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
         mapping[pRow][pCol] = 0;
@@ -296,7 +296,7 @@ function keydownHandler(e) {
         setTimeout(chop, chopTime - speed, "left", mapping[pRow][pCol - 1]);
         concentrating = true;
       }
-    } else if (e.key === "ArrowUp") {
+    } else if (e.key === "w") {
       if (mapping[pRow - 1][pCol] === 0) {
         ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
         mapping[pRow][pCol] = 0;
@@ -309,7 +309,7 @@ function keydownHandler(e) {
         setTimeout(chop, chopTime - speed, "up", mapping[pRow - 1][pCol]);
         concentrating = true;
       }
-    } else if (e.key === "ArrowDown") {
+    } else if (e.key === "s") {
       if (mapping[pRow + 1][pCol] === 0) {
         ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
         mapping[pRow][pCol] = 0;
@@ -322,13 +322,13 @@ function keydownHandler(e) {
         setTimeout(chop, chopTime - speed, "down", mapping[pRow + 1][pCol]);
         concentrating = true;
       }
-    } else if (e.key === "w") {
+    } else if (e.key === "i") {
       plantSeed("ArrowUp");
-    } else if (e.key === "a") {
+    } else if (e.key === "j") {
       plantSeed("ArrowLeft");
-    } else if (e.key === "s") {
+    } else if (e.key === "k") {
       plantSeed("ArrowDown");
-    } else if (e.key === "d") {
+    } else if (e.key === "l") {
       plantSeed("ArrowRight");
     }
   }
@@ -517,11 +517,11 @@ function handleSwipeGesture() {
     // Determine swipe direction and threshold checking
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
         if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
-            keyEvent.key = deltaX > 0 ? 'ArrowRight' : 'ArrowLeft';
+            keyEvent.key = deltaX > 0 ? 'd' : 'a';
         }
     } else {
         if (Math.abs(deltaY) >= SWIPE_THRESHOLD) {
-            keyEvent.key = deltaY > 0 ? 'ArrowDown' : 'ArrowUp';
+            keyEvent.key = deltaY > 0 ? 's' : 'w';
         }
     }
 
@@ -539,7 +539,7 @@ function handleSwipeGesture() {
 }
 
 function plantSeed(e) {
-  if (e === "ArrowUp" && mapping[pRow - 1][pCol] === 0) {
+  if (e === "w" && mapping[pRow - 1][pCol] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow - 1, pCol);
@@ -560,7 +560,7 @@ function plantSeed(e) {
         setTimeout(growTree, 18000 - grow, 12, pRow - 1, pCol);
         break;
     }
-  } else if (e === "ArrowDown" && mapping[pRow + 1][pCol] === 0) {
+  } else if (e === "s" && mapping[pRow + 1][pCol] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow + 1, pCol);
@@ -581,7 +581,7 @@ function plantSeed(e) {
         setTimeout(growTree, 18000 - grow, 12, pRow + 1, pCol);
         break;
     }
-  } else if (e === "ArrowLeft" && mapping[pRow][pCol - 1] === 0) {
+  } else if (e === "a" && mapping[pRow][pCol - 1] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow, pCol - 1);
@@ -602,7 +602,7 @@ function plantSeed(e) {
         setTimeout(growTree, 18000 - grow, 12, pRow, pCol - 1);
         break;
     }
-  } else if (e === "ArrowRight" && mapping[pRow][pCol + 1] === 0) {
+  } else if (e === "d" && mapping[pRow][pCol + 1] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow, pCol + 1);
