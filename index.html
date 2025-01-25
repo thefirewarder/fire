@@ -227,17 +227,17 @@ function draw() {
             for (let col = 0; col < map[0].length; col++) {
               switch(mapping[row][col])
                 {
-                case 1: // Stone
+          case 1: // Stone
           ctx.drawImage(stone, 0, 0, stone.width, stone.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
-        case 0: // Grass
+          case 0: // Grass
           ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
           case 2: // Logan
           ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           ctx.drawImage(logan, 0, 0, logan.width, logan.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
-        case 3: //Tree
+          case 3: //Tree
           ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           ctx.drawImage(tree, 0, 0, tree.width, tree.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
@@ -257,7 +257,7 @@ function draw() {
           ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           ctx.drawImage(willow, 0, 0, willow.width, willow.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, 64,64);
           break;
-           case 8: //Tree
+          case 8: //Tree
           ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           ctx.drawImage(tree, 0, 0, tree.width, tree.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
