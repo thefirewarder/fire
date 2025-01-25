@@ -334,7 +334,7 @@ function keydownHandler(e) {
         if (Math.random() < 0.5) {  // 50% chance to hit the bear
           bhp--;  // Reduce bear's health by 1
           console.log("Hit the bear! Remaining HP:", bhp);
-          ui.innerHTML="Status: Frenzy. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp
+          ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp+" Seed Inventory: "+seed
           if (bhp <= 0) {
             console.log("Bear defeated!");
             mapping[newRow][newCol] = 0;  // Remove the bear from the map
