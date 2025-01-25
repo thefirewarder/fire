@@ -340,6 +340,8 @@ function keydownHandler(e) {
             console.log("Bear defeated!");
             mapping[mRow][mCol]=0
             mapping[mapping.length-5][mapping[0].length-5]=6// Remove the bear from the map
+            mRow = mapping.length-5
+            mCol = mapping[0].length-5
           }
         } else {
           console.log("Missed the bear!");
