@@ -339,7 +339,7 @@ function keydownHandler(e) {
           if (bhp <= 0) {
             console.log("Bear defeated!");
             mapping[mRow][mCol]=0
-            mapping[map.length-5][map[0].length-5]=6// Remove the bear from the map
+            mapping[mapping.length-5][mapping[0].length-5]=6// Remove the bear from the map
           }
         } else {
           console.log("Missed the bear!");
