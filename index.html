@@ -290,78 +290,46 @@ function draw() {
   })
 }
 }
-function keydownHandler(e) {
-  // Hide the shop button initially
-  button.style.display = "none";
+else if (mapping[newRow][newCol] === 6) {  
+    console.log("Bear encountered!");
+    if (Math.random() < 0.5) {  // 50% chance to hit the bear
+        bhp--;  // Reduce bear's health by 1
+        
+        ui.innerHTML = `Status: Combat. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
+        console.log("Hit the bear! Remaining HP:", bhp);
 
-  if (!concentrating && !shopping && !dead) {
-    let newRow = pRow, newCol = pCol;
-    let moveDirection = null;
-
-    if (e.key === "d") {
-      newCol = pCol + 1;
-      moveDirection = "right";
-    } else if (e.key === "a") {
-      newCol = pCol - 1;
-      moveDirection = "left";
-    } else if (e.key === "w") {
-      newRow = pRow - 1;
-      moveDirection = "up";
-    } else if (e.key === "s") {
-      newRow = pRow + 1;
-      moveDirection = "down";
-    }
-
-    if (moveDirection) {
-      if (mapping[newRow][newCol] === 0) {
-        ui.innerHTML = `Status: Idle. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
-        mapping[pRow][pCol] = 0;
-        pRow = newRow;
-        pCol = newCol;
-        camera.x += (moveDirection === "right" ? 64 : moveDirection === "left" ? -64 : 0);
-        camera.y += (moveDirection === "down" ? 64 : moveDirection === "up" ? -64 : 0);
-        mapping[pRow][pCol] = 2;
-      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[newRow][newCol])) {
-        ui.innerHTML = `Status: Chopping. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
-        let chopTime = (mapping[newRow][newCol] === 7 || mapping[newRow][newCol] >= 9) ? 9000 : 5000;
-        setTimeout(chop, chopTime - speed, moveDirection, mapping[newRow][newCol]);
-        concentrating = true;
-      } else if (mapping[newRow][newCol] === 5) {  
-        console.log("Shop detected");
-        button.style.display = "block";  // Show the shop button when next to a shop
-      } else if (mapping[newRow][newCol] === 6) {  
-        console.log("Bear encountered!");
-        if (Math.random() < 0.5) {  // 50% chance to hit the bear
-          bhp--;  // Reduce bear's health by 1
-          
-   ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
-          console.log("Hit the bear! Remaining HP:", bhp);
-          if (bhp <= 0) {
+        if (bhp <= 0) {
             console.log("Bear defeated!");
-            mapping[mRow][mCol]=0
-            mapping[mapping.length-5][mapping[0].length-5]=6// Remove the bear from the map
-            mRow = mapping.length-5
-            mCol = mapping[0].length-5
-          }
-        } else {
-          console.log("Missed the bear!");
-        }
-      }
-    } else if (["i", "j", "k", "l"].includes(e.key)) {
-      let direction = {
-        "i": "ArrowUp",
-        "j": "ArrowLeft",
-        "k": "ArrowDown",
-        "l": "ArrowRight"
-      }[e.key];
-      plantSeed(direction);
-    }
-  }
+            
+            // Remove any existing bear on the map
+            for (let row = 0; row < mapping.length; row++) {
+                for (let col = 0; col < mapping[0].length; col++) {
+                    if (mapping[row][col] === 6) {
+                        mapping[row][col] = 0;  // Clear previous bear location
+                    }
+                }
+            }
 
-  if (Math.ceil(Math.random() * 100) <= 90) {
-    moveMonsters();
-  }
+            // Respawn bear in the bottom-right corner (row length-5, column length-5)
+            mRow = mapping.length - 5;
+            mCol = mapping[0].length - 5;
+            mapping[mRow][mCol] = 6;  // Place the bear in the correct spot
+            bhp = 5;  // Reset bear health
+        }
+    } else {
+        console.log("Missed the bear!");
+        hp--;  // Player takes damage if they miss
+        if (hp <= 0) {
+            console.log("You died!");
+            dead = true;
+            death.style.display = "block";  // Display game over
+        }
+    }
+
+    // Update UI after combat
+    ui.innerHTML = `Status: Combat. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
 }
+
 
 
 function getRandomInt(min, max) {
