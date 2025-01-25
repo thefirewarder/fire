@@ -223,8 +223,8 @@ function draw() {
         item.style.visibility = "hidden";
     });
     if (!dead) {
-        for (let row = startRow; row < endRow; row++) {
-            for (let col = startCol; col < endCol; col++) {
+        for (let row = 0; row < map.length; row++) {
+            for (let col = 0; col < map[0].length; col++) {
               switch(mapping[row][col])
                 {
                 case 1: // Stone
