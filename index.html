@@ -349,10 +349,10 @@ mapping[mRow][mCol]=0
       }
     } else if (["i", "j", "k", "l"].includes(e.key)) {
       let direction = {
-        "i": "ArrowUp",
-        "j": "ArrowLeft",
-        "k": "ArrowDown",
-        "l": "ArrowRight"
+        "i": "w",
+        "j": "a",
+        "k": "s",
+        "l": "d"
       }[e.key];
       plantSeed(direction);
     }
