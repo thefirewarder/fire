@@ -225,6 +225,8 @@ function draw() {
     if (!dead) {
         for (let row = startRow; row < endRow; row++) {
             for (let col = startCol; col < endCol; col++) {
+              switch(mapping[row][col])
+                {
                 case 1: // Stone
           ctx.drawImage(stone, 0, 0, stone.width, stone.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
@@ -275,6 +277,7 @@ function draw() {
           ctx.drawImage(grass, 0, 0, grass.width, grass.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           ctx.drawImage(diamond, 0, 0, diamond.width, diamond.height, col * BLOCK_SIZE - camera.x, row * BLOCK_SIZE - camera.y, BLOCK_SIZE, BLOCK_SIZE);
           break;
+                }
             }
         }
     }
