@@ -338,6 +338,7 @@ function keydownHandler(e) {
           bhp--;  // Reduce bear's health by 1
           console.log("Hit the bear! Remaining HP:", bhp);
           if (bhp <= 0) {
+            bhp = 5
             console.log("Bear defeated!");
 mapping[mRow][mCol]=0
             mRow=mapping.length-5
