@@ -16,7 +16,7 @@
       <button class="items" id="basic">Buy Basic Axe, 30 trees. Speed: 4, Knockback: 1 Damage: 1 Multiplier: 2</button>
             <button class="items" id="spring">Buy Springy hand, 80 trees. Speed: 6, Knockback: 4 Damage: 1 Multiplier: 2</button>
       <button class="items" id="danny">Buy Damaging Danny, 80 trees. Speed: 6, Knockback: 1 Damage: 2 Multiplier: 2</button>
-       <button class="items" id="soil">Buy Soil Upgrade, 3 trees. Speeds up tree growing by 100 milliseconds.</button>
+       <button class="items" id="soil">Buy Soil Upgrade, 3 trees. Speeds up tree growing by 200 milliseconds.</button>
 <button class="items" id="spawn">Buy Spawn Chance increase, 3 trees. Increases the chances of a basic or willow tree naturally spawning</button>
       <button id="shop">Open Shop</button>
       <canvas width="3600" height="3200"></canvas>
@@ -954,12 +954,12 @@ function shop7()
 {
 if(trees>=cost7)
   {
-    grow+=100
+    grow+=200
 trees-=cost7
     cost7*=1.1
     cost7=Math.ceil(cost7)
      ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
-     soil.innerHTML="Buy Soil Upgrade, "+cost7+" trees. Speeds up tree growing by 100 milliseconds."
+     soil.innerHTML="Buy Soil Upgrade, "+cost7+" trees. Speeds up tree growing by 200 milliseconds."
    
 }
 }
@@ -967,7 +967,7 @@ function shop8()
 {
 if(trees>=cost8)
   {
-    chance += 100
+    chance += 200
 trees-=cost8
     cost8*=1.1
     cost8=Math.ceil(cost8)
