@@ -360,6 +360,7 @@ mapping[mRow][mCol]=0
 
   if (Math.ceil(Math.random() * 100) <= 90) {
     moveMonsters();
+    updateUI
   }
 }
 
@@ -982,6 +983,12 @@ function growTree(type,tRow,tCol)
 {
   mapping[tRow][tCol]=type
 }
+      function updateUI() {
+    ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+}
+
+
+
       </script>
     <script src="sketch.js"></script>
   </body>
