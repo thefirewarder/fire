@@ -355,10 +355,9 @@ function keydownHandler(e) {
 
   if (Math.ceil(Math.random() * 100) <= 90) {
     moveMonsters();
-    ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp+" Seed inventory: "+seed
   }
 }
-
+ui.innerHTML="Status: Frenzy. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp
 
 
 function getRandomInt(min, max) {
