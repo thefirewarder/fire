@@ -5,6 +5,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.11.1/addons/p5.sound.min.js"></script>
     <link rel="stylesheet" type="text/css" href="style.css">
     <meta charset="utf-8" />
+
   </head>
   <body>
     <main>
@@ -35,9 +36,6 @@ canvas {
 #ui{
   background-color:white;
 }
-#shop{
- /*display: none;*/
-}
 #death{
   top: 25%;
   left: 25%;
@@ -49,9 +47,10 @@ canvas {
   visibility: hidden;
   display: none;
 }
+
     </style>
     <script>
-      // Canvas setup
+      // Canvas setu
 let dmg=1
 let spring = document.querySelector("#spring")
 let willow = new Image()
@@ -82,6 +81,7 @@ let ctx = canvas.getContext("2d");
 let cardboard = document.querySelector("#cardboard")
 let dull = document.querySelector("#dull")
 let button = document.querySelector("#shop")
+ button.style.display="none"
 let bear = new Image()
 let bhp = 5
 let death= document.querySelector("#death")
@@ -290,47 +290,80 @@ function draw() {
   })
 }
 }
-else if (mapping[newRow][newCol] === 6) {  
-    console.log("Bear encountered!");
-    if (Math.random() < 0.5) {  // 50% chance to hit the bear
-        bhp--;  // Reduce bear's health by 1
-        
-        ui.innerHTML = `Status: Combat. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
-        console.log("Hit the bear! Remaining HP:", bhp);
 
-        if (bhp <= 0) {
-            console.log("Bear defeated!");
-            
-            // Remove any existing bear on the map
-            for (let row = 0; row < mapping.length; row++) {
-                for (let col = 0; col < mapping[0].length; col++) {
-                    if (mapping[row][col] === 6) {
-                        mapping[row][col] = 0;  // Clear previous bear location
-                    }
-                }
-            }
+  // Draw only the visible blocks
+ 
 
-            // Respawn bear in the bottom-right corner (row length-5, column length-5)
-            mRow = mapping.length - 5;
-            mCol = mapping[0].length - 5;
-            mapping[mRow][mCol] = 6;  // Place the bear in the correct spot
-            bhp = 5;  // Reset bear health
-        }
-    } else {
-        console.log("Missed the bear!");
-        hp--;  // Player takes damage if they miss
-        if (hp <= 0) {
-            console.log("You died!");
-            dead = true;
-            death.style.display = "block";  // Display game over
-        }
+function keydownHandler(e) {
+  button.style.display = "none";
+  if (!concentrating && !shopping && !dead) {
+    if (e.key === "ArrowRight") {
+      if (mapping[pRow][pCol + 1] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pCol++;
+        camera.x += 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow][pCol + 1])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow][pCol + 1] === 7 || mapping[pRow][pCol + 1] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "right", mapping[pRow][pCol + 1]);
+        concentrating = true;
+      }
+    } else if (e.key === "ArrowLeft") {
+      if (mapping[pRow][pCol - 1] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pCol--;
+        camera.x -= 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow][pCol - 1])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow][pCol - 1] === 7 || mapping[pRow][pCol - 1] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "left", mapping[pRow][pCol - 1]);
+        concentrating = true;
+      }
+    } else if (e.key === "ArrowUp") {
+      if (mapping[pRow - 1][pCol] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pRow--;
+        camera.y -= 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow - 1][pCol])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow - 1][pCol] === 7 || mapping[pRow - 1][pCol] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "up", mapping[pRow - 1][pCol]);
+        concentrating = true;
+      }
+    } else if (e.key === "ArrowDown") {
+      if (mapping[pRow + 1][pCol] === 0) {
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        mapping[pRow][pCol] = 0;
+        pRow++;
+        camera.y += 64;
+        mapping[pRow][pCol] = 2;
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow + 1][pCol])) {
+        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        let chopTime = (mapping[pRow + 1][pCol] === 7 || mapping[pRow + 1][pCol] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, "down", mapping[pRow + 1][pCol]);
+        concentrating = true;
+      }
+    } else if (e.key === "w") {
+      plantSeed("ArrowUp");
+    } else if (e.key === "a") {
+      plantSeed("ArrowLeft");
+    } else if (e.key === "s") {
+      plantSeed("ArrowDown");
+    } else if (e.key === "d") {
+      plantSeed("ArrowRight");
     }
+  }
 
-    // Update UI after combat
-    ui.innerHTML = `Status: Combat. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
+  if (Math.ceil(Math.random() * 100) <= 90) {
+    moveMonsters();
+  }
 }
-
-
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
@@ -511,11 +544,11 @@ function handleSwipeGesture() {
     // Determine swipe direction and threshold checking
     if (Math.abs(deltaX) > Math.abs(deltaY)) {
         if (Math.abs(deltaX) >= SWIPE_THRESHOLD) {
-            keyEvent.key = deltaX > 0 ? 'd' : 'a';
+            keyEvent.key = deltaX > 0 ? 'ArrowRight' : 'ArrowLeft';
         }
     } else {
         if (Math.abs(deltaY) >= SWIPE_THRESHOLD) {
-            keyEvent.key = deltaY > 0 ? 's' : 'w';
+            keyEvent.key = deltaY > 0 ? 'ArrowDown' : 'ArrowUp';
         }
     }
 
@@ -533,7 +566,7 @@ function handleSwipeGesture() {
 }
 
 function plantSeed(e) {
-  if (e === "w" && mapping[pRow - 1][pCol] === 0) {
+  if (e === "ArrowUp" && mapping[pRow - 1][pCol] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow - 1, pCol);
@@ -554,7 +587,7 @@ function plantSeed(e) {
         setTimeout(growTree, 18000 - grow, 12, pRow - 1, pCol);
         break;
     }
-  } else if (e === "s" && mapping[pRow + 1][pCol] === 0) {
+  } else if (e === "ArrowDown" && mapping[pRow + 1][pCol] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow + 1, pCol);
@@ -575,7 +608,7 @@ function plantSeed(e) {
         setTimeout(growTree, 18000 - grow, 12, pRow + 1, pCol);
         break;
     }
-  } else if (e === "a" && mapping[pRow][pCol - 1] === 0) {
+  } else if (e === "ArrowLeft" && mapping[pRow][pCol - 1] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow, pCol - 1);
@@ -596,7 +629,7 @@ function plantSeed(e) {
         setTimeout(growTree, 18000 - grow, 12, pRow, pCol - 1);
         break;
     }
-  } else if (e === "d" && mapping[pRow][pCol + 1] === 0) {
+  } else if (e === "ArrowRight" && mapping[pRow][pCol + 1] === 0) {
     switch (seed) {
       case "acorn":
         setTimeout(growTree, 10000 - grow, 3, pRow, pCol + 1);
@@ -787,7 +820,6 @@ let direction = undefined;
         mapping[mRow][mCol]=6
         break;
     }
-      
    }
   else{
         knocked=false
@@ -805,7 +837,6 @@ let direction = undefined;
       })
     }
 }
- ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
 cardboard.addEventListener("click",shop1,false)
 potion.addEventListener("click",shop2,false)
 dull.addEventListener("click",shop3,false)
