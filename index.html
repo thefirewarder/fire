@@ -290,68 +290,67 @@ function draw() {
  
 
 function keydownHandler(e) {
+  // Hide the shop button initially
   button.style.display = "none";
+
   if (!concentrating && !shopping && !dead) {
+    let newRow = pRow, newCol = pCol;
+    let moveDirection = null;
+
     if (e.key === "d") {
-      if (mapping[pRow][pCol + 1] === 0) {
-        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        mapping[pRow][pCol] = 0;
-        pCol++;
-        camera.x += 64;
-        mapping[pRow][pCol] = 2;
-      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow][pCol + 1])) {
-        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        let chopTime = (mapping[pRow][pCol + 1] === 7 || mapping[pRow][pCol + 1] >= 9) ? 9000 : 5000;
-        setTimeout(chop, chopTime - speed, "right", mapping[pRow][pCol + 1]);
-        concentrating = true;
-      }
+      newCol = pCol + 1;
+      moveDirection = "right";
     } else if (e.key === "a") {
-      if (mapping[pRow][pCol - 1] === 0) {
-        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        mapping[pRow][pCol] = 0;
-        pCol--;
-        camera.x -= 64;
-        mapping[pRow][pCol] = 2;
-      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow][pCol - 1])) {
-        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        let chopTime = (mapping[pRow][pCol - 1] === 7 || mapping[pRow][pCol - 1] >= 9) ? 9000 : 5000;
-        setTimeout(chop, chopTime - speed, "left", mapping[pRow][pCol - 1]);
-        concentrating = true;
-      }
+      newCol = pCol - 1;
+      moveDirection = "left";
     } else if (e.key === "w") {
-      if (mapping[pRow - 1][pCol] === 0) {
-        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        mapping[pRow][pCol] = 0;
-        pRow--;
-        camera.y -= 64;
-        mapping[pRow][pCol] = 2;
-      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow - 1][pCol])) {
-        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        let chopTime = (mapping[pRow - 1][pCol] === 7 || mapping[pRow - 1][pCol] >= 9) ? 9000 : 5000;
-        setTimeout(chop, chopTime - speed, "up", mapping[pRow - 1][pCol]);
-        concentrating = true;
-      }
+      newRow = pRow - 1;
+      moveDirection = "up";
     } else if (e.key === "s") {
-      if (mapping[pRow + 1][pCol] === 0) {
-        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+      newRow = pRow + 1;
+      moveDirection = "down";
+    }
+
+    if (moveDirection) {
+      if (mapping[newRow][newCol] === 0) {
+        ui.innerHTML = `Status: Idle. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
         mapping[pRow][pCol] = 0;
-        pRow++;
-        camera.y += 64;
+        pRow = newRow;
+        pCol = newCol;
+        camera.x += (moveDirection === "right" ? 64 : moveDirection === "left" ? -64 : 0);
+        camera.y += (moveDirection === "down" ? 64 : moveDirection === "up" ? -64 : 0);
         mapping[pRow][pCol] = 2;
-      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[pRow + 1][pCol])) {
-        ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
-        let chopTime = (mapping[pRow + 1][pCol] === 7 || mapping[pRow + 1][pCol] >= 9) ? 9000 : 5000;
-        setTimeout(chop, chopTime - speed, "down", mapping[pRow + 1][pCol]);
+      } else if ([3, 8, 7, 9, 10, 11, 12].includes(mapping[newRow][newCol])) {
+        ui.innerHTML = `Status: Chopping. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
+        let chopTime = (mapping[newRow][newCol] === 7 || mapping[newRow][newCol] >= 9) ? 9000 : 5000;
+        setTimeout(chop, chopTime - speed, moveDirection, mapping[newRow][newCol]);
         concentrating = true;
+      } else if (mapping[newRow][newCol] === 5) {  
+        console.log("Shop detected");
+        button.style.display = "block";  // Show the shop button when next to a shop
+      } else if (mapping[newRow][newCol] === 6) {  
+        console.log("Bear encountered!");
+        if (Math.random() < 0.5) {  // 50% chance to hit the bear
+          bhp--;  // Reduce bear's health by 1
+          console.log("Hit the bear! Remaining HP:", bhp);
+          if (bhp <= 0) {
+            console.log("Bear defeated!");
+mapping[mRow][mCol]=0
+            mRow=mapping.length-5
+            mCol=mapping[0].length-5// Remove the bear from the map
+          }
+        } else {
+          console.log("Missed the bear!");
+        }
       }
-    } else if (e.key === "i") {
-      plantSeed("w");
-    } else if (e.key === "j") {
-      plantSeed("a");
-    } else if (e.key === "k") {
-      plantSeed("s");
-    } else if (e.key === "l") {
-      plantSeed("d");
+    } else if (["i", "j", "k", "l"].includes(e.key)) {
+      let direction = {
+        "i": "ArrowUp",
+        "j": "ArrowLeft",
+        "k": "ArrowDown",
+        "l": "ArrowRight"
+      }[e.key];
+      plantSeed(direction);
     }
   }
 
@@ -359,6 +358,7 @@ function keydownHandler(e) {
     moveMonsters();
   }
 }
+
 
 function getRandomInt(min, max) {
   min = Math.ceil(min);
