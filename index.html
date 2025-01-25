@@ -779,6 +779,7 @@ let direction = undefined;
         if(mapping[mRow-1][mCol]===2&&Math.ceil(Math.random()*2)===1)
           {
             hp--
+             ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
           }
         mapping[mRow][mCol]=6
         break;
@@ -791,6 +792,7 @@ let direction = undefined;
         if(mapping[mRow+1][mCol]===2&&Math.ceil(Math.random()*2)===1)
           {
             hp--
+             ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
           }
         mapping[mRow][mCol]=6
         break;
@@ -803,6 +805,7 @@ let direction = undefined;
         if(mapping[mRow][mCol-1]===2&&Math.ceil(Math.random()*2)===1)
           {
             hp--
+             ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
           }
         mapping[mRow][mCol]=6
         break;
@@ -815,6 +818,7 @@ let direction = undefined;
         if(mapping[mRow][mCol+1]===2&&Math.ceil(Math.random()*2)===1)
           {
             hp--
+             ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
           }
         mapping[mRow][mCol]=6
         break;
@@ -836,7 +840,6 @@ let direction = undefined;
       })
     }
 }
-  ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed     
 cardboard.addEventListener("click",shop1,false)
 potion.addEventListener("click",shop2,false)
 dull.addEventListener("click",shop3,false)
