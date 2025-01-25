@@ -360,7 +360,7 @@ mapping[mRow][mCol]=0
 
   if (Math.ceil(Math.random() * 100) <= 90) {
     moveMonsters();
-    updateUI
+    updateUI()
   }
 }
 
@@ -984,7 +984,14 @@ function growTree(type,tRow,tCol)
   mapping[tRow][tCol]=type
 }
       function updateUI() {
+        if(ui.innerHTML.includes("Idle")
+           {
     ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        }
+        else{
+          ui.innerHTML = "Status: Chopping. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        }
+        }
 }
 
 
