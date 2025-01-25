@@ -866,7 +866,7 @@ function shop1()
       dmg = 1
       cost1*=1.1
       cost1=Math.ceil(cost1)
-       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+        ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
       cardboard.innerHTML="Buy Cardboard Axe,"+cost1+" trees. Speed: 4.75, Knockback: 1 Damage: 1 Multiplier: 1"
     }
 }
@@ -882,7 +882,7 @@ function shop2()
           hp=10
         }
       cost2=Math.ceil(cost2)
-       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+       ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
       potion.innerHTML="Buy Healing Potion,"+cost2+" trees. Heals 1-5 damage."
     }
 }
@@ -897,7 +897,7 @@ function shop3()
       dmg = 1
       cost3*=1.1
       cost3=Math.ceil(cost3)
-       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+        ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
       cardboard.innerHTML="Buy Cardboard Axe,"+cost3+" trees. Speed: 4.25, Knockback: 1 Damage: 1 Multiplier: 1"
     }
 }
@@ -913,7 +913,7 @@ function shop4()
       dmg = 1
       cost4*=1.1
       cost4=Math.ceil(cost4)
-       ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+        ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
      basic.innerHTML="Buy Basic Axe,"+cost4+" trees. Speed: 4, Knockback: 1 Damage: 1 Multiplier: 2"
     }
 }
@@ -929,7 +929,7 @@ trees-=cost5
     knockback=4
     cost5*=1.1
     cost5=Math.ceil(cost5)
-    ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+     ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
      spring.innerHTML="Buy Springy Hand,"+cost5+" trees. Speed: 6, Knockback: 4 Damage: 1 Multiplier: 2"
 }
 }
@@ -945,7 +945,7 @@ trees-=cost6
     knockback=1
     cost6*=1.1
     cost6=Math.ceil(cost6)
-    ui.innerHTML="Status: Chopping. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+    ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
      danny.innerHTML="Buy Damaging Danny,"+cost6+" trees. Speed: 6, Knockback: 1 Damage: 2 Multiplier: 2"
 }
 }
@@ -957,8 +957,9 @@ if(trees>=cost7)
 trees-=cost7
     cost7*=1.1
     cost7=Math.ceil(cost7)
+     ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
      soil.innerHTML="Buy Soil Upgrade, "+cost7+" trees. Speeds up tree growing by 100 milliseconds."
-    updateUI()
+   
 }
 }
 function shop8()
@@ -969,8 +970,9 @@ if(trees>=cost8)
 trees-=cost8
     cost8*=1.1
     cost8=Math.ceil(cost8)
+     ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
      spawn.innerHTML="Buy Spawn Chance increase, "+cost8+" trees. Increases the chances of a basic or willow tree naturally spawning."
-    updateUI()
+    
 }
 }
 function endFrenzy()
