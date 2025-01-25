@@ -330,28 +330,18 @@ function keydownHandler(e) {
         console.log("Shop detected");
         button.style.display = "block";  // Show the shop button when next to a shop
       } else if (mapping[newRow][newCol] === 6) {  
-    console.log("Bear encountered!");
-    if (Math.random() < 0.5) {  // 50% chance to hit the bear
-        bhp--;  // Reduce bear's health by 1
-        console.log("Hit the bear! Remaining HP:", bhp);
-        if (bhp <= 0) {
+        console.log("Bear encountered!");
+        if (Math.random() < 0.5) {  // 50% chance to hit the bear
+          bhp--;  // Reduce bear's health by 1
+          
+   ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
+          console.log("Hit the bear! Remaining HP:", bhp);
+          if (bhp <= 0) {
             console.log("Bear defeated!");
-            mapping[newRow][newCol] = 0;  // Remove the bear from the map
-        }
-    } else {
-        console.log("Missed the bear!");
-        hp -= 1;  // Take damage when missing the bear
-        if (hp <= 0) {
-            console.log("You died!");
-            dead = true;
-            death.style.display = "block";  // Show GAME OVER screen
-        }
-    }
-    
-    // Update UI to reflect health change
-    ui.innerHTML = `Status: Combat. Equipped: ${inventory}. Trees: ${trees} Health: ${hp} Seed inventory: ${seed}`;
-}
- else {
+            mapping[mRow][mCol]=0
+            mapping[map.length-5][map[0].length-5]=6// Remove the bear from the map
+          }
+        } else {
           console.log("Missed the bear!");
         }
       }
