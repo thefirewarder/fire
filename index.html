@@ -341,7 +341,7 @@ function keydownHandler(e) {
         
         if (e.key === "w" && mRow - knockback >= 0 && mapping[mRow - knockback][mCol] !== 1) {
             mRow -= knockback;
-            console.log("knocking");
+            console.log("mRow: "+mRow+" pRow "+pRow);
         } else if (e.key === "a" && mCol - knockback >= 0 && mapping[mRow][mCol - knockback] !== 1) {
             mCol -= knockback;
         } else if (e.key === "s" && mRow + knockback < mapping.length && mapping[mRow + knockback][mCol] !== 1) {
