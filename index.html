@@ -444,7 +444,7 @@ function chop(direction,tree)
   if(tree===3)
     {
   trees+=multiplier
-      if(Math.ceil(Math.random()*10)!==10)
+      if(Math.ceil(Math.random()*10)<9)
         {
   seed="acorn"
         }
@@ -455,11 +455,11 @@ function chop(direction,tree)
   else if(tree===7)
     {
       trees+=multiplier*2
-      if(Math.ceil(Math.random()*10)>4)
+      if(Math.ceil(Math.random()*10)>3)
         {
   seed="acorn"
         }
-      else if(Math.ceil(Math.random()*6)!==6){
+      else if(Math.ceil(Math.random()*7)<6){
         seed="willow"
       }
       else{
@@ -473,11 +473,11 @@ function chop(direction,tree)
   else if(tree===9)
     {
       trees+=multiplier*3
-      if(Math.ceil(Math.random()*10)>4)
+      if(Math.ceil(Math.random()*10)>3)
         {
   seed="willow"
         }
-      else if(Math.ceil(Math.random()*6)!==6){
+      else if(Math.ceil(Math.random()*7)<6){
         seed="bronze"
       }
       else{
@@ -487,11 +487,11 @@ function chop(direction,tree)
   else if(tree===10)
     {
        trees+=multiplier*4
-      if(Math.ceil(Math.random()*10)>4)
+      if(Math.ceil(Math.random()*10)>3)
         {
   seed="bronze"
         }
-      else if(Math.ceil(Math.random()*6)!==6){
+      else if(Math.ceil(Math.random()*7)<6){
         seed="silver"
       }
       else{
@@ -501,11 +501,11 @@ function chop(direction,tree)
   else if(tree===11)
     {
        trees+=multiplier*5
-      if(Math.ceil(Math.random()*10)>4)
+      if(Math.ceil(Math.random()*10)>3)
         {
   seed="silver"
         }
-      else if(Math.ceil(Math.random()*6)!==6){
+      else if(Math.ceil(Math.random()*7)<6){
         seed="gold"
       }
       else{
@@ -515,11 +515,11 @@ function chop(direction,tree)
   else if(tree===12)
 {
    trees+=multiplier*6
-      if(Math.ceil(Math.random()*10)>4)
+      if(Math.ceil(Math.random()*10)<4)
         {
   seed="gold"
         }
-      else if(Math.ceil(Math.random()*6)!==6){
+      else{
         seed="diamond"
       }
 }
