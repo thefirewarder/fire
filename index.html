@@ -300,14 +300,14 @@ if (mapping[newRow][newCol] === 6) {
         mapping[mRow][mCol] = 0; // Clear the bear's current position
         
         // Apply knockback effect
-        if (e.key === "w" && mRow - knockback >= 0 && mapping[mRow - knockback][mCol] !== 1) {
-            mRow -= knockback;
-        } else if (e.key === "a" && mCol - knockback >= 0 && mapping[mRow][mCol - knockback] !== 1) {
-            mCol -= knockback;
-        } else if (e.key === "s" && mRow + knockback < mapping.length && mapping[mRow + knockback][mCol] !== 1) {
-            mRow += knockback;
-        } else if (e.key === "d" && mCol + knockback < mapping[0].length && mapping[mRow][mCol + knockback] !== 1) {
-            mCol += knockback;
+        if (e.key === "w" && mRow - (knockback+1) >= 0 && mapping[mRow - (knockback+1)][mCol] !== 1) {
+            mRow -= knockback+1;
+        } else if (e.key === "a" && mCol - (knockback+1) >= 0 && mapping[mRow][mCol - (knockback+1)] !== 1) {
+            mCol -= knockback+1;
+        } else if (e.key === "s" && mRow + (knockback+1) < mapping.length && mapping[mRow + (knockback+1)][mCol] !== 1) {
+            mRow += knockback+1;
+        } else if (e.key === "d" && mCol + (knockback+1) < mapping[0].length && mapping[mRow][mCol + (knockback+1)] !== 1) {
+            mCol += knockback+1;
         }
         
         // Update the bear's new position
