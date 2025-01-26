@@ -56,7 +56,7 @@ let willow = new Image()
 willow.src="willow.png"
 let danny = document.querySelector("#danny")
 let basic = document.querySelector("#basic")
-let cost4 = 40
+let cost4 = 30
 let knocked = false
 let multiplier = 1
 let frenzied=false
@@ -928,7 +928,7 @@ function shop3()
       cost3*=1.1
       cost3=Math.ceil(cost3)
         ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
-      cardboard.innerHTML="Buy Cardboard Axe,"+cost3+" trees. Speed: 4.25, Knockback: 1 Damage: 1 Multiplier: 1"
+      dull.innerHTML="Buy Dull Axe,"+cost3+" trees. Speed: 4.25, Knockback: 1 Damage: 1 Multiplier: 1"
     }
 }
 function shop4()
