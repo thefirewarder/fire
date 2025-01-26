@@ -375,12 +375,13 @@ function keydownHandler(e) {
       }[e.key];
       plantSeed(direction);
     }
-  }
+
 
   if (Math.ceil(Math.random() * 100) <= 90) {
     moveMonsters();
     updateUI()
   }
+}
 
 
 function getRandomInt(min, max) {
