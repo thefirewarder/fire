@@ -333,38 +333,36 @@ function keydownHandler(e) {
         console.log("Shop detected");
         button.style.display = "block";  // Show the shop button when next to a shop
       } else if (mapping[newRow][newCol] === 6) {  
-        console.log("Bear encountered!");
+    console.log("Bear encountered!");
+    
+    if (Math.random() < 0.5) {  // 50% chance to hit the bear
+        bhp--;  // Reduce bear's health by 1
+        mapping[mRow][mCol] = 0;
         
-        if (Math.random() < 0.5) {  // 50% chance to hit the bear
-          bhp--;  // Reduce bear's health by 1
-          mapping[mRow][mCol]=0
-          if(e.key==="w"&&mapping[mRow-knockback-1][mCol]!==1)
-          {
-            mRow-=knockback-1
-            console.log("knocking")
-          }
-          else if(e.key==="a"&&mapping[mRow][mCol-knockback-1]!==1)
-          {
-            mCol-=knockback-1
-          }
-         else if(e.key==="s"&&mapping[mRow+knockback+1][mCol]!==1)
-          {
-            mRow+=knockback+1
-          }
-         else if(e.key==="d"&&mapping[mRow][mCol+knockback+1]!==1)
-          {
-            mCol+=knockback+1
-          }
-          mapping[mRow][mCol]=6
-          console.log("Hit the bear! Remaining HP:", bhp);
-          if (bhp <= 0) {
-            bhp = 5
+        if (e.key === "w" && mRow - knockback >= 0 && mapping[mRow - knockback][mCol] !== 1) {
+            mRow -= knockback;
+            console.log("knocking");
+        } else if (e.key === "a" && mCol - knockback >= 0 && mapping[mRow][mCol - knockback] !== 1) {
+            mCol -= knockback;
+        } else if (e.key === "s" && mRow + knockback < mapping.length && mapping[mRow + knockback][mCol] !== 1) {
+            mRow += knockback;
+        } else if (e.key === "d" && mCol + knockback < mapping[0].length && mapping[mRow][mCol + knockback] !== 1) {
+            mCol += knockback;
+        }
+        
+        mapping[mRow][mCol] = 6;
+        console.log("Hit the bear! Remaining HP:", bhp);
+        
+        if (bhp <= 0) {
+            bhp = 5;
             console.log("Bear defeated!");
-mapping[mRow][mCol]=0
-            mRow=mapping.length-5
-            mCol=mapping[0].length-5// Remove the bear from the map
-          }
-        } else {
+            mapping[mRow][mCol] = 0; // Remove the bear from the map
+            mRow = mapping.length - 5;
+            mCol = mapping[0].length - 5;
+        }
+    }
+}
+ else {
           console.log("Missed the bear!");
         }
       }
