@@ -341,6 +341,7 @@ function keydownHandler(e) {
           if(e.key==="w"&&mapping[mRow-knockback-1][mCol]!==1)
           {
             mRow-=knockback-1
+            console.log("knocking")
           }
           else if(e.key==="a"&&mapping[mRow][mCol-knockback-1]!==1)
           {
