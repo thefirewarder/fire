@@ -334,8 +334,26 @@ function keydownHandler(e) {
         button.style.display = "block";  // Show the shop button when next to a shop
       } else if (mapping[newRow][newCol] === 6) {  
         console.log("Bear encountered!");
+        
         if (Math.random() < 0.5) {  // 50% chance to hit the bear
           bhp--;  // Reduce bear's health by 1
+          mapping[mRow][mCol]=0
+          if(e.key==="w"&&mapping[mRow-knockback][mCol]!==1)
+          {
+            mRow-=knockback
+          }
+          else if(e.key==="a"&&mapping[mRow][mCol-knockback]!==1)
+          {
+            mCol-=knockback
+          }
+         else if(e.key==="s"&&mapping[mRow+knockback][mCol]!==1)
+          {
+            mRow+=knockback
+          }
+         else if(e.key==="d"&&mapping[mRow][mCol+knockback]!==1)
+          {
+            mCol+=knockback
+          }
           console.log("Hit the bear! Remaining HP:", bhp);
           if (bhp <= 0) {
             bhp = 5
