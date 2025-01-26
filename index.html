@@ -354,6 +354,7 @@ function keydownHandler(e) {
           {
             mCol+=knockback
           }
+          mapping[mRow][mCol]=6
           console.log("Hit the bear! Remaining HP:", bhp);
           if (bhp <= 0) {
             bhp = 5
