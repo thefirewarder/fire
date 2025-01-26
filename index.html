@@ -332,16 +332,16 @@ function keydownHandler(e) {
       } else if (mapping[newRow][newCol] === 5) {  
         console.log("Shop detected");
         button.style.display = "block";  // Show the shop button when next to a shop
-      } else if (mapping[newRow][newCol] === 6) {  
+      }if (mapping[newRow][newCol] === 6) {  
     console.log("Bear encountered!");
     
     if (Math.random() < 0.5) {  // 50% chance to hit the bear
         bhp--;  // Reduce bear's health by 1
-        mapping[mRow][mCol] = 0;
+        mapping[mRow][mCol] = 0; // Clear the bear's current position
         
+        // Apply knockback effect
         if (e.key === "w" && mRow - knockback >= 0 && mapping[mRow - knockback][mCol] !== 1) {
             mRow -= knockback;
-            console.log("mRow: "+mRow+" pRow "+pRow);
         } else if (e.key === "a" && mCol - knockback >= 0 && mapping[mRow][mCol - knockback] !== 1) {
             mCol -= knockback;
         } else if (e.key === "s" && mRow + knockback < mapping.length && mapping[mRow + knockback][mCol] !== 1) {
@@ -350,21 +350,20 @@ function keydownHandler(e) {
             mCol += knockback;
         }
         
-        mapping[mRow][mCol] = 6;
+        // Update the bear's new position
+        mapping[mRow][mCol] = 6; // Set the bear's new position
         console.log("Hit the bear! Remaining HP:", bhp);
         
         if (bhp <= 0) {
             bhp = 5;
             console.log("Bear defeated!");
             mapping[mRow][mCol] = 0; // Remove the bear from the map
-            mRow = mapping.length - 5;
-            mCol = mapping[0].length - 5;
+            mRow = mapping.length - 5; // Reset bear's position
+            mCol = mapping[0].length - 5; // Reset bear's position
         }
     }
 }
- else {
-          console.log("Missed the bear!");
-        }
+
       }
     } else if (["i", "j", "k", "l"].includes(e.key)) {
       let direction = {
