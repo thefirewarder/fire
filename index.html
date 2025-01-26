@@ -314,6 +314,23 @@ function keydownHandler(e) {
       newRow = pRow + 1;
       moveDirection = "down";
     }
+    else if(e.key==="j")
+      {
+        plantSeed("a")
+      }
+    else if(e.key==="k")
+      {
+        plantSeed("s")
+      }
+     else if(e.key==="l")
+      {
+        plantSeed("d")
+      }
+    else if(e.key==="i")
+      {
+        plantSeed("w")
+      }
+    
 
     if (moveDirection) {
       if (mapping[newRow][newCol] === 0) {
@@ -369,15 +386,7 @@ function keydownHandler(e) {
 }
 
       }
-    } else if (["i", "j", "k", "l"].includes(e.key)) {
-      let direction = {
-        "i": "w",
-        "j": "a",
-        "k": "s",
-        "l": "d"
-      }[e.key];
-      plantSeed(direction);
-    }
+    } 
 
 
   if (Math.ceil(Math.random() * 100) <= 90) {
