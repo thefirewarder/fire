@@ -350,6 +350,10 @@ function keydownHandler(e) {
             mCol += knockback;
         }
         console.log("Update successful!")
+      if(knockback>0)
+      {
+        knocked=true
+      }
         // Update the bear's new position
         mapping[mRow][mCol] = 6; // Set the bear's new position
         console.log("Hit the bear! Remaining HP:", bhp);
