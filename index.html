@@ -131,7 +131,11 @@ let pCol = 4
 logan.src="logan.png"
 window.addEventListener("keydown",keydownHandler,false)
 // Disable scrolling on touch devices
-
+let cost7 = 3
+let cost8 = 3
+let cost2 = 3
+let cost3 = 25
+let cost5=90
 document.addEventListener('touchmove', function(event) {
   event.preventDefault();
 }, { passive: false }); 
@@ -879,12 +883,7 @@ basic.addEventListener("click",shop4,false)
 spring.addEventListener("click",shop5,false)
 danny.addEventListener("click",shop6,false)
 soil.addEventListener("click",shop7,false)
-spawn.addEventListener("click",shop7,false)
-cost7 = 3
-cost8 = 3
-cost2 = 3
-cost3 = 25
-cost5=90
+spawn.addEventListener("click",shop8,false)
 var cost6 = 90
 function shop1()
 {
@@ -993,19 +992,19 @@ trees-=cost7
    
 }
 }
-function shop8()
-{
-if(trees>=cost8)
-  {
-    chance += 200
-trees-=cost8
-    cost8*=1.1
-    cost8=Math.ceil(cost8)
-     ui.innerHTML="Status: Idle. Equipped: "+inventory+". Trees: "+trees+" Health: "+hp +" Seed inventory: "+seed
-     spawn.innerHTML="Buy Spawn Chance increase, "+cost8+" trees. Increases the chances of a basic or willow tree naturally spawning."
-    
+function shop8() {
+    if (trees >= cost8) {
+        chance += 200;
+        trees -= cost8;
+        cost8 *= 1.1;
+        cost8 = Math.ceil(cost8);
+        
+        // Update the UI elements to reflect the new state
+        ui.innerHTML = "Status: Idle. Equipped: " + inventory + ". Trees: " + trees + " Health: " + hp + " Seed inventory: " + seed;
+        spawn.innerHTML = "Buy Spawn Chance increase, " + cost8 + " trees. Increases the chances of a basic or willow tree naturally spawning.";
+    } 
 }
-}
+
 function endFrenzy()
 {      
   dmg--
