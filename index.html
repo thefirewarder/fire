@@ -712,15 +712,16 @@ function removeStumps()
     }
 }
 
-function clickHandler()
-{if(!shopping){
-shopping=true
-  
-  button.innerHTML="Back to game"
-}
-else{
-shopping=false
-  button.innerHTML="Open Shop"
+function clickHandler() {
+    if (!shopping) {
+        shopping = true;
+        button.innerHTML = "Back to game";
+        button.style.display = "block"; // Ensure the button stays visible
+    } else {
+        shopping = false;
+        button.innerHTML = "Open Shop";
+        button.style.display = "block"; // Ensure the button stays visible
+    }
 }
 
 
